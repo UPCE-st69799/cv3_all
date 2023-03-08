@@ -1,6 +1,7 @@
 package cz.upce.fei.cv01.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import cz.upce.fei.cv01.dto.TaskResponseDtoV1;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -19,14 +20,28 @@ public class Task {
     @Column
     private String title;
 
+    @Column
+    private String description;
     @ManyToOne
     @JoinColumn(name = "author_id")
     @ToString.Exclude
     private AppUser author;
+
 
     @Column
     private LocalDateTime creationDate;
 
     @Column
     private LocalDateTime updateDate;
+
+    public TaskResponseDtoV1 toDto()
+    {
+        return new TaskResponseDtoV1(
+                getId(),
+                getTitle(),
+                getDescription(),
+                getCreationDate(),
+                getUpdateDate()
+        );
+    }
 }
