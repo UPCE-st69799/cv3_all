@@ -1,3 +1,11 @@
 type Query {
-    appUser()
+    appUser(id: ID!): AppUser!
+}
+
+type AppUser {
+    id: ID!,
+    username: String!,
+    active: Boolean!,
+    creationDate: String!,
+    updateDate: String
 }
