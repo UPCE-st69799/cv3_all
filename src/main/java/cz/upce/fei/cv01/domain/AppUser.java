@@ -1,5 +1,6 @@
 package cz.upce.fei.cv01.domain;
 
+import cz.upce.fei.cv01.dto.AppUserDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -57,4 +58,7 @@ public class AppUser {
     }
 
 
+    public static AppUserDto toDto(final AppUser appUser){
+        return new AppUserDto(appUser.getId(),appUser.getUsername(),appUser.getPassword(),appUser.getActive(),appUser.getCreationDate(),appUser.getUpdateDate());
+    }
 }

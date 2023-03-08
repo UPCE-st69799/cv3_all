@@ -4,7 +4,6 @@ import cz.upce.fei.cv01.config.JwtRequest;
 import cz.upce.fei.cv01.config.JwtResponse;
 import cz.upce.fei.cv01.config.JwtTokenUtil;
 import cz.upce.fei.cv01.domain.AppUser;
-import cz.upce.fei.cv01.dto.AppUserDto;
 import cz.upce.fei.cv01.dto.AppUserInputDto;
 import cz.upce.fei.cv01.repository.AppUserRepository;
 import cz.upce.fei.cv01.service.AppUserService;
@@ -20,10 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 @RestController
@@ -38,17 +34,17 @@ public class AppUserController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUser(@PathVariable final Long userId) throws ResourceNotFoundException {
-        return ResponseEntity.ok(toDto(appUserService.finById(userId)));
+        return ResponseEntity.ok(AppUser.toDto(appUserService.finById(userId)));
     }
 
     @PostMapping("")
     public ResponseEntity<?> createUser(@RequestBody @Validated AppUserInputDto userDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(toDto(appUserService.create(toEntity(userDto))));
+        return ResponseEntity.status(HttpStatus.CREATED).body(AppUser.toDto(appUserService.create(toEntity(userDto))));
     }
 
     @PutMapping("/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable Long userId,@RequestBody AppUserInputDto userDto) {
-        return ResponseEntity.ok(toDto(appUserService.update(toEntity(userId,userDto))));
+        return ResponseEntity.ok(AppUser.toDto(appUserService.update(toEntity(userId,userDto))));
     }
 
     @DeleteMapping("/{userId}")
@@ -64,10 +60,6 @@ public class AppUserController {
     private static AppUser toEntity(Long id,final AppUserInputDto inputDto){
         return new AppUser(id,inputDto.getUsername(),inputDto.getPassword(),inputDto.getActive(),inputDto.getCreationDate(),inputDto.getUpdateDate());
     }
-
-private static AppUserDto toDto(final AppUser appUser){
-    return new AppUserDto(appUser.getId(),appUser.getUsername(),appUser.getPassword(),appUser.getActive(),appUser.getCreationDate(),appUser.getUpdateDate());
-}
 
     @PostMapping(value = "/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest)
